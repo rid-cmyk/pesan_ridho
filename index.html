@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pesan Rahasia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background-size: 400% 400%;
+      animation: bgMove 20s ease infinite;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+    @keyframes bgMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    .bokeh {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 30%, rgba(255,255,255,0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 50% 80%, rgba(255,255,255,0.05) 0%, transparent 40%);
+      animation: bokehMove 15s linear infinite alternate;
+      z-index: 1;
+    }
+    @keyframes bokehMove {
+      0% {transform: translate(0, 0);}
+      100% {transform: translate(-50px, -30px);}
+    }
+    #pesan-box {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+      margin: 0 auto;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 30px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 40px rgba(0,0,0,0.4);
+      text-align: center;
+      opacity: 0;
+      animation: fadeInBox 2s forwards;
+    }
+    @keyframes fadeInBox {
+      to { opacity: 1; }
+    }
+    #teks p {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideFade 1s forwards;
+    }
+    @keyframes slideFade {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    #unmute-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1em;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      animation: pulse 2s infinite;
+      z-index: 3;
+      display: none;
+    }
+    @keyframes pulse {
+      0% {box-shadow: 0 0 15px rgba(255,255,255,0.3);}
+      50% {box-shadow: 0 0 25px rgba(255,255,255,0.5);}
+      100% {box-shadow: 0 0 15px rgba(255,255,255,0.3);}
+    }
+    #qr-container {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    #qr-container img {
+      width: 150px;
+      animation: fadeIn 1s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="bokeh"></div>
+
+  <div id="pesan-box">
+    <h1 id="judul">✨ Loading…</h1>
+    <div id="teks"></div>
+  </div>
+
+  <button id="unmute-btn">🔊 Klik untuk dengar musik</button>
+
+  <audio id="musik" src="https://your-link-mp3.com/lagu.mp3" autoplay loop muted></audio>
+
+  <div id="qr-container">
+    <a href="https://your-link.com" target="_blank">
+      <img src="https://via.placeholder.com/150" alt="QR Code">
+    </a>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const key = urlParams.get('key');
+    const passCewek = "abcd1234";
+
+    const judulEl = document.getElementById('judul');
+    const teksEl = document.getElementById('teks');
+    const musik = document.getElementById('musik');
+    const unmuteBtn = document.getElementById('unmute-btn');
+    const qrContainer = document.getElementById('qr-container');
+
+    const kalimat = [
+      "🌸 Aku tau kamu adalah sosok yang kuat dan penuh dengan nilai yang tinggi.",
+      "🌸 Saat aku melihatmu, aku sadar betapa indahnya kamu menjaga dirimu dengan penuh kehormatan.",
+      "🌸 Tapi aku ingin menyampaikan sesuatu yang mungkin kamu butuhkan untuk mendengar.",
+      "",
+      "✨ Keputusan hidupmu untuk menjaga harga diri dan tetap setia pada nilai-nilai yang mulia adalah keputusan yang luar biasa.",
+      "✨ Aku sangat menghargai itu, dan aku tahu, kamu akan terus melangkah dengan penuh keteguhan.",
+      "✨ Tapi jika aku menerima tawaran yang ada, aku merasa aku akan merusak harga dirimu, dan itu adalah hal yang tidak akan pernah kuinginkan.",
+      "✨ Jadi, lebih baik aku menolak dengan lembut, karena lebih baik menghormati dan menjaga kedamaian dalam diri kita.",
+      "",
+      "🌷 Apapun yang terjadi, aku berharap kamu tetap tegar dan terus menyalakan semangat dalam dirimu.",
+      "🌷 Jangan biarkan apa pun mengubah jalanmu, tetaplah menjadi dirimu yang terbaik, dan percayalah bahwa kebahagiaan akan datang pada waktunya.",
+      "🌟 Terima kasih telah menjaga harga dirimu. Semoga Allah selalu memberikan yang terbaik untukmu. 🙏"
+    ];
+
+    if (localStorage.getItem('sudahLihat')) {
+      judulEl.innerText = "🙏";
+      teksEl.innerHTML = "<p>Pesan ini sudah tidak tersedia lagi.</p>";
+      qrContainer.style.display = 'none';
+    } else if (key === passCewek) {
+      judulEl.innerText = "Hai… 🌼";
+      let indexKalimat = 0;
+
+      function tampilkanKalimat() {
+        if (indexKalimat < kalimat.length) {
+          const p = document.createElement('p');
+          p.textContent = "";
+          p.style.animationDelay = (indexKalimat * 1.2) + "s";
+          teksEl.appendChild(p);
+          let hurufIndex = 0;
+          const isiKalimat = kalimat[indexKalimat];
+
+          function ketikHuruf() {
+            if (hurufIndex < isiKalimat.length) {
+              p.textContent += isiKalimat.charAt(hurufIndex);
+              hurufIndex++;
+              setTimeout(ketikHuruf, 35);
+            }
+          }
+          ketikHuruf();
+          indexKalimat++;
+          setTimeout(tampilkanKalimat, 1500);
+        }
+      }
+
+      tampilkanKalimat();
+
+      localStorage.setItem('sudahLihat', true);
+
+      setTimeout(() => {
+        judulEl.innerText = "✨";
+        teksEl.innerHTML = "<p>Pesan ini sudah berakhir.</p>";
+        teksEl.style.transition = 'opacity 2s';
+        teksEl.style.opacity = 0.7;
+      }, 300000); // 5 menit
+
+      unmuteBtn.style.display = 'block';
+      unmuteBtn.addEventListener('click', () => {
+        musik.muted = false;
+        musik.volume = 0;
+        const fadeAudio = setInterval(() => {
+          if (musik.volume < 1) {
+            musik.volume += 0.05;
+          } else {
+            clearInterval(fadeAudio);
+          }
+        }, 200);
+        musik.play();
+        unmuteBtn.style.display = 'none';
+      });
+    } else {
+      judulEl.innerText = "⚠️";
+      teksEl.innerHTML = "<p>Link tidak valid atau sudah kadaluarsa.</p>";
+      qrContainer.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
